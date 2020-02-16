@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
 import Particles from 'react-particles-js';
-import Navigation from '../components/Navigation/Navigation';
 import Logo from '../components/Logo/Logo';
 import ImageLinkForm from '../components/ImageLinkForm/ImageLinkForm';
 import FaceReco from '../components/FaceReco/FaceReco';
-import SignIn from '../components/SignIn/SignIn';
-import Register from '../components/Register/Register';
-import Rank from '../components/Rank/Rank';
 import './App.css';
 
 console.log('path at app:', process.env.PATH);
@@ -25,23 +21,13 @@ const particlesOptions = {
 const initialState = {
 	input : '',
 	imgUrl : '',
-	box : {},
-	route: 'signin',
-	isSignedIn : false,
-	user : {
-		id:'',
-		name: '',
-		email: '',
-		entries : 0,
-		joined : ''
-	}
+	box : {}
 }
 class App extends Component {
 	constructor(){
 		super()
 		this.state = initialState;
 	}
-
 
 	calFaceLocation = (data) => {
 		const face = data.outputs[0].data.regions[0].region_info.bounding_box;
@@ -66,55 +52,19 @@ class App extends Component {
 	}
 
 	onButtonSubmit = () => {
-		console.log('img url before calling the server:', this.state.input);
-    this.setState({imgUrl: this.state.input});
-	   //  fetch('https://blooming-scrubland-26588.herokuapp.com/imageUrl', {
-	   //          method: 'post',
-	   //          headers: {'Content-Type': 'application/json'},
-	   //          body: JSON.stringify({
-	   //            input : this.state.input
-	   //          })
-	   //  })
-	   //  .then(response => response.json())
-	   //  .then(response => {
-	   //      if (response) {
-	          fetch('https://blooming-scrubland-26588.herokuapp.com/image', {
-	            method: 'post',
-	            headers: {'Content-Type': 'application/json'},
-	            body: JSON.stringify({
-	              input : this.state.input
-	            })
-	          })
-	            .then(response => response.json())
-	            .then(data => {
-	            	console.log('data back from server:', data);
-	              //this.setState(Object.assign(this.state.user, { entries: count}))
-	            })
-
-	     //    }
-	     //    this.displayFaceBox(this.calFaceLocation(response))
-	     //  })
-      // .catch(err => console.log(err));
+    	this.setState({imgUrl: this.state.input});
+    	fetch('https://blooming-scrubland-26588.herokuapp.com/image', {
+	        method: 'POST',
+	        headers: {'Content-Type': 'application/json'},
+	        body: JSON.stringify({
+	          input : this.state.input
+	        })
+	     }).then(response => response.json())
+    		.then(data => {
+	        	console.log('data back from server:', data);
+	          	this.displayFaceBox(this.calFaceLocation(data))
+	        })
   	}
-
-  	loadUser = (data) => {
-    this.setState({user: {
-      id: data.id,
-      name: data.name,
-      email: data.email,
-      entries: data.entries,
-      joined: data.joined
-    }})
-  }
-
-	onRouteChange = (route) => {
-    if (route === 'signout') {
-      this.setState(initialState);
-    } else if (route === 'home') {
-      this.setState({isSignedIn: true})
-    }
-    this.setState({route: route});
-  }
 
   componentDidMount() {
   	//general fetch to wake up the server cause heroku is crup
@@ -122,15 +72,14 @@ class App extends Component {
   }
 
 	render(){
-		const { isSignedIn,imgUrl,box,route } = this.state;
+		const { imgUrl,box } = this.state;
 	  return (
 		    <div className="App">
 		    	<Particles className='particles'
           		params={particlesOptions}
         		/>
-		    	<div>
+		    	<div className='mt4'>
 		      	<Logo />
-		      	<Rank name={this.state.user.name} entries={this.state.user.entries}/>
 		      	<ImageLinkForm onInputChange={this.onInputChange} onButtonSubmit={this.onButtonSubmit}/>
 		   		<FaceReco imgUrl={imgUrl} box={box}/>
 		   		</div>

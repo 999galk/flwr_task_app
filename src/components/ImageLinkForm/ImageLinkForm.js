@@ -4,10 +4,10 @@ import './ImageLinkForm.css';
 const ImageLinkForm = ({ onInputChange, onButtonSubmit }) => {
 	return(
 		<div className='pb4'>
-			<p className='f3'>
-				{'This magic brain will detect faces in your pictures!'}
+			<p className='white f3'>
+				{'This magic brain will detect a face in your pictures!'}
 			</p>
-			<p className='f3'>
+			<p className='white f3'>
 				{'Submit an image URL and give it a try!'}
 			</p>
 			<div className="form center pa4 br3 shadow-5" style={{display:'flex', justifyContent:'center', flexWrap:'wrap'}}>
