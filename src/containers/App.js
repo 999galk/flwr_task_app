@@ -47,7 +47,6 @@ class App extends Component {
 	}
 
 	onInputChange = (event) => {
-		console.log('img url for input:', event.target.value);
 		this.setState({input : event.target.value});
 	}
 
@@ -61,14 +60,13 @@ class App extends Component {
 	        })
 	     }).then(response => response.json())
     		.then(data => {
-	        	console.log('data back from server:', data);
 	          	this.displayFaceBox(this.calFaceLocation(data))
 	        })
   	}
 
   componentDidMount() {
   	//general fetch to wake up the server cause heroku is crup
-		//fetch('https://blooming-scrubland-26588.herokuapp.com/');
+		fetch('https://blooming-scrubland-26588.herokuapp.com/');
   }
 
 	render(){
